@@ -2,8 +2,8 @@
   var OWNER = 'SmoothSend';
   var REPO = 'status';
   var DAYS = 90;
-  var DEGRADED_THRESHOLD = 5;   // minutes down → degraded
-  var OUTAGE_THRESHOLD = 30;    // minutes down → major outage
+  var DEGRADED_THRESHOLD = 5;
+  var OUTAGE_THRESHOLD = 30;
 
   var groups = [
     { label: 'Core Infrastructure', services: ['API Gateway'] },
@@ -51,9 +51,101 @@
     return '#D0021B';
   }
 
-  function formatDate(dateStr) {
+  function formatDateLong(dateStr) {
+    var d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function formatDateShort(dateStr) {
     var d = new Date(dateStr + 'T00:00:00');
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+
+  function formatDuration(mins) {
+    var h = Math.floor(mins / 60);
+    var m = Math.round(mins % 60);
+    return h + ' hrs  ' + m + ' mins';
+  }
+
+  // Shared tooltip element
+  var tooltip = null;
+  var activeBar = null;
+
+  function createTooltip() {
+    tooltip = document.createElement('div');
+    tooltip.className = 'ss-tooltip';
+    tooltip.innerHTML = '<div class="ss-tooltip-date"></div><div class="ss-tooltip-status"></div>';
+    document.body.appendChild(tooltip);
+  }
+
+  function showTooltip(bar, e) {
+    if (!tooltip) createTooltip();
+    activeBar = bar;
+
+    var date = bar.getAttribute('data-day');
+    var mins = parseFloat(bar.getAttribute('data-mins')) || 0;
+    var status = getBarStatus(mins);
+    var svcName = bar.getAttribute('data-svc');
+
+    var dateStr = formatDateLong(date);
+    var statusIcon, statusLabel, statusColor, detail;
+
+    if (status === 'operational') {
+      statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>';
+      statusLabel = 'No downtime recorded';
+      statusColor = '#0066FF';
+      detail = '';
+    } else if (status === 'degraded') {
+      statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="#F5A623" stroke="none"><path d="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6z"/><path d="M12 10v4M12 16v1" stroke="#F5A623" stroke-width="2" fill="none"/></svg>';
+      statusLabel = 'Partial outage';
+      statusColor = '#F5A623';
+      detail = formatDuration(mins);
+    } else {
+      statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D0021B" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
+      statusLabel = 'Major outage';
+      statusColor = '#D0021B';
+      detail = formatDuration(mins);
+    }
+
+    var html = '<div class="ss-tooltip-date">' + dateStr + '</div>';
+    html += '<div class="ss-tooltip-row">';
+    html += '<span class="ss-tooltip-icon">' + statusIcon + '</span>';
+    html += '<span class="ss-tooltip-label" style="color:' + statusColor + '">' + statusLabel + '</span>';
+    if (detail) {
+      html += '<span class="ss-tooltip-detail">' + detail + '</span>';
+    }
+    html += '</div>';
+    if (svcName) {
+      html += '<div class="ss-tooltip-svc">' + svcName + '</div>';
+    }
+
+    tooltip.innerHTML = html;
+    tooltip.style.display = 'block';
+
+    positionTooltip(bar);
+  }
+
+  function positionTooltip(bar) {
+    var rect = bar.getBoundingClientRect();
+    var tw = tooltip.offsetWidth;
+    var th = tooltip.offsetHeight;
+
+    var left = rect.left + rect.width / 2 - tw / 2;
+    var top = rect.top - th - 10 + window.scrollY;
+
+    if (left < 8) left = 8;
+    if (left + tw > window.innerWidth - 8) left = window.innerWidth - tw - 8;
+    if (top < window.scrollY + 8) {
+      top = rect.bottom + 10 + window.scrollY;
+    }
+
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
+  }
+
+  function hideTooltip() {
+    if (tooltip) tooltip.style.display = 'none';
+    activeBar = null;
   }
 
   function createTimeline(svc, days) {
@@ -87,11 +179,13 @@
       var bar = document.createElement('div');
       bar.className = 'ss-bar ss-bar-' + barStatus;
       bar.style.backgroundColor = getBarColor(barStatus);
-      bar.setAttribute('data-date', formatDate(day));
-      bar.setAttribute('data-status', barStatus === 'operational' ? 'Up' : barStatus === 'degraded' ? 'Degraded' : 'Down');
-      if (mins > 0) {
-        bar.setAttribute('data-down', Math.round(mins) + 'min down');
-      }
+      bar.setAttribute('data-day', day);
+      bar.setAttribute('data-mins', mins);
+      bar.setAttribute('data-svc', svc.name);
+
+      bar.addEventListener('mouseenter', function (e) { showTooltip(bar, e); });
+      bar.addEventListener('mouseleave', hideTooltip);
+
       bars.appendChild(bar);
     });
 
