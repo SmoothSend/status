@@ -217,6 +217,17 @@
   white-space: nowrap;
 }
 
+/* Hide the default Upptime time period selector and live status cards */
+.f.changed,
+div.svelte-fqsq6s.f {
+  display: none !important;
+}
+
+.live-status,
+.live-status ~ section:not(.svelte-8lnl4f) {
+  display: none !important;
+}
+
 @media (max-width: 640px) {
   .ss-timeline-bars {
     height: 28px;
