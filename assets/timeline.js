@@ -11,6 +11,8 @@
     { label: 'Experimental Relayers (Testnet)', services: ['EVM Relayer (Testnet)', 'Stellar Relayer (Testnet)'] }
   ];
 
+  var issuesByServiceDay = {};
+
   function getDayKey(date) {
     return date.toISOString().split('T')[0];
   }
@@ -56,47 +58,112 @@
     return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
   }
 
-  function formatDateShort(dateStr) {
-    var d = new Date(dateStr + 'T00:00:00');
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  }
-
   function formatDuration(mins) {
     var h = Math.floor(mins / 60);
     var m = Math.round(mins % 60);
     return h + ' hrs  ' + m + ' mins';
   }
 
-  // Shared tooltip element
+  function matchServiceToIssue(issueTitle, serviceNames) {
+    var t = issueTitle.toLowerCase();
+    var matched = [];
+    serviceNames.forEach(function (name) {
+      var slug = name.toLowerCase().replace(/[()]/g, '').trim();
+      var parts = slug.split(/\s+/);
+      var keyPart = parts[0];
+      if (t.indexOf(keyPart) !== -1) matched.push(name);
+    });
+    return matched;
+  }
+
+  function getDaysForIssue(issue) {
+    var created = getDayKey(new Date(issue.created_at));
+    var closed = issue.closed_at ? getDayKey(new Date(issue.closed_at)) : getDayKey(new Date());
+    var days = [];
+    var d = new Date(created + 'T00:00:00');
+    var end = new Date(closed + 'T00:00:00');
+    while (d <= end) {
+      days.push(getDayKey(d));
+      d.setDate(d.getDate() + 1);
+    }
+    return days;
+  }
+
+  function fetchIssues(serviceNames) {
+    var url = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/issues?state=all&per_page=100&labels=maintenance,incident';
+    return fetch(url)
+      .then(function (r) { return r.json(); })
+      .then(function (issues) {
+        if (!Array.isArray(issues)) return;
+        issues.forEach(function (issue) {
+          if (issue.pull_request) return;
+          var labels = (issue.labels || []).map(function (l) { return l.name; });
+          var isMaintenance = labels.indexOf('maintenance') !== -1;
+          var isIncident = labels.indexOf('incident') !== -1;
+          if (!isMaintenance && !isIncident) return;
+
+          var matched = matchServiceToIssue(issue.title, serviceNames);
+          var issueDays = getDaysForIssue(issue);
+
+          if (matched.length === 0) matched = serviceNames;
+
+          matched.forEach(function (svcName) {
+            issueDays.forEach(function (day) {
+              var key = svcName + '::' + day;
+              if (!issuesByServiceDay[key]) issuesByServiceDay[key] = [];
+              issuesByServiceDay[key].push({
+                title: issue.title,
+                type: isMaintenance ? 'maintenance' : 'incident',
+                url: issue.html_url,
+                number: issue.number
+              });
+            });
+          });
+        });
+      })
+      .catch(function () {});
+  }
+
   var tooltip = null;
-  var activeBar = null;
 
   function createTooltip() {
     tooltip = document.createElement('div');
     tooltip.className = 'ss-tooltip';
-    tooltip.innerHTML = '<div class="ss-tooltip-date"></div><div class="ss-tooltip-status"></div>';
     document.body.appendChild(tooltip);
   }
 
-  function showTooltip(bar, e) {
+  function showTooltip(bar) {
     if (!tooltip) createTooltip();
-    activeBar = bar;
 
     var date = bar.getAttribute('data-day');
     var mins = parseFloat(bar.getAttribute('data-mins')) || 0;
     var status = getBarStatus(mins);
     var svcName = bar.getAttribute('data-svc');
+    var issueKey = svcName + '::' + date;
+    var issues = issuesByServiceDay[issueKey] || [];
 
     var dateStr = formatDateLong(date);
     var statusIcon, statusLabel, statusColor, detail;
 
-    if (status === 'operational') {
+    if (status === 'operational' && issues.length === 0) {
       statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>';
       statusLabel = 'No downtime recorded';
       statusColor = '#0066FF';
       detail = '';
+    } else if (status === 'operational' && issues.length > 0) {
+      var t = issues[0].type;
+      if (t === 'maintenance') {
+        statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>';
+        statusLabel = 'Scheduled maintenance';
+        statusColor = '#0066FF';
+      } else {
+        statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01"/></svg>';
+        statusLabel = 'Incident reported';
+        statusColor = '#F5A623';
+      }
+      detail = '';
     } else if (status === 'degraded') {
-      statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="#F5A623" stroke="none"><path d="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6z"/><path d="M12 10v4M12 16v1" stroke="#F5A623" stroke-width="2" fill="none"/></svg>';
+      statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01"/></svg>';
       statusLabel = 'Partial outage';
       statusColor = '#F5A623';
       detail = formatDuration(mins);
@@ -111,17 +178,25 @@
     html += '<div class="ss-tooltip-row">';
     html += '<span class="ss-tooltip-icon">' + statusIcon + '</span>';
     html += '<span class="ss-tooltip-label" style="color:' + statusColor + '">' + statusLabel + '</span>';
-    if (detail) {
-      html += '<span class="ss-tooltip-detail">' + detail + '</span>';
-    }
+    if (detail) html += '<span class="ss-tooltip-detail">' + detail + '</span>';
     html += '</div>';
-    if (svcName) {
-      html += '<div class="ss-tooltip-svc">' + svcName + '</div>';
+
+    if (issues.length > 0) {
+      html += '<div class="ss-tooltip-issues">';
+      html += '<div class="ss-tooltip-issues-label">RELATED</div>';
+      issues.forEach(function (iss) {
+        var typeTag = iss.type === 'maintenance'
+          ? '<span class="ss-issue-tag ss-issue-tag-maint">Maintenance</span>'
+          : '<span class="ss-issue-tag ss-issue-tag-incident">Incident</span>';
+        html += '<div class="ss-tooltip-issue">' + typeTag + ' ' + iss.title + '</div>';
+      });
+      html += '</div>';
     }
+
+    html += '<div class="ss-tooltip-svc">' + svcName + '</div>';
 
     tooltip.innerHTML = html;
     tooltip.style.display = 'block';
-
     positionTooltip(bar);
   }
 
@@ -129,23 +204,17 @@
     var rect = bar.getBoundingClientRect();
     var tw = tooltip.offsetWidth;
     var th = tooltip.offsetHeight;
-
     var left = rect.left + rect.width / 2 - tw / 2;
     var top = rect.top - th - 10 + window.scrollY;
-
     if (left < 8) left = 8;
     if (left + tw > window.innerWidth - 8) left = window.innerWidth - tw - 8;
-    if (top < window.scrollY + 8) {
-      top = rect.bottom + 10 + window.scrollY;
-    }
-
+    if (top < window.scrollY + 8) top = rect.bottom + 10 + window.scrollY;
     tooltip.style.left = left + 'px';
     tooltip.style.top = top + 'px';
   }
 
   function hideTooltip() {
     if (tooltip) tooltip.style.display = 'none';
-    activeBar = null;
   }
 
   function createTimeline(svc, days) {
@@ -176,14 +245,29 @@
     days.forEach(function (day) {
       var mins = down[day] || 0;
       var barStatus = getBarStatus(mins);
+      var issueKey = svc.name + '::' + day;
+      var hasIssue = issuesByServiceDay[issueKey] && issuesByServiceDay[issueKey].length > 0;
+
       var bar = document.createElement('div');
       bar.className = 'ss-bar ss-bar-' + barStatus;
-      bar.style.backgroundColor = getBarColor(barStatus);
+
+      if (hasIssue && barStatus === 'operational') {
+        var issueType = issuesByServiceDay[issueKey][0].type;
+        if (issueType === 'maintenance') {
+          bar.style.backgroundColor = '#0066FF';
+          bar.style.backgroundImage = 'repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(255,255,255,0.15) 2px,rgba(255,255,255,0.15) 4px)';
+        } else {
+          bar.style.backgroundColor = '#F5A623';
+        }
+      } else {
+        bar.style.backgroundColor = getBarColor(barStatus);
+      }
+
       bar.setAttribute('data-day', day);
       bar.setAttribute('data-mins', mins);
       bar.setAttribute('data-svc', svc.name);
 
-      bar.addEventListener('mouseenter', function (e) { showTooltip(bar, e); });
+      bar.addEventListener('mouseenter', function () { showTooltip(bar); });
       bar.addEventListener('mouseleave', hideTooltip);
 
       bars.appendChild(bar);
@@ -193,10 +277,8 @@
 
     var legend = document.createElement('div');
     legend.className = 'ss-timeline-legend';
-
     var left = document.createElement('span');
     left.textContent = '90 days ago';
-
     var center = document.createElement('div');
     center.className = 'ss-timeline-center';
     var line1 = document.createElement('div');
@@ -209,10 +291,8 @@
     center.appendChild(line1);
     center.appendChild(uptimeSpan);
     center.appendChild(line2);
-
     var right = document.createElement('span');
     right.textContent = 'Today';
-
     legend.appendChild(left);
     legend.appendChild(center);
     legend.appendChild(right);
@@ -230,10 +310,8 @@
 
   function render(data) {
     var days = getLast90Days();
-
     var main = document.querySelector('main.container');
     if (!main) return;
-
     var liveStatus = main.querySelector('.live-status');
     if (!liveStatus) return;
 
@@ -251,32 +329,34 @@
 
     var existingSections = main.querySelectorAll('.live-status, .live-status ~ section');
     existingSections.forEach(function (el) { el.style.display = 'none'; });
-
     var h2parent = main.querySelector('.f.changed');
     if (h2parent) h2parent.style.display = 'none';
 
-    var insertBefore = liveStatus;
-    insertBefore.parentNode.insertBefore(wrapper, insertBefore);
+    liveStatus.parentNode.insertBefore(wrapper, liveStatus);
   }
 
   function init() {
-    fetch('https://raw.githubusercontent.com/' + OWNER + '/' + REPO + '/master/history/summary.json')
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        function tryRender() {
-          var main = document.querySelector('main.container');
-          var ls = main && main.querySelector('.live-status');
-          if (ls && !document.getElementById('ss-custom-timeline')) {
-            render(data);
-          } else if (!document.getElementById('ss-custom-timeline')) {
-            setTimeout(tryRender, 300);
-          }
+    var allServices = [];
+    groups.forEach(function (g) { allServices = allServices.concat(g.services); });
+
+    Promise.all([
+      fetch('https://raw.githubusercontent.com/' + OWNER + '/' + REPO + '/master/history/summary.json').then(function (r) { return r.json(); }),
+      fetchIssues(allServices)
+    ]).then(function (results) {
+      var data = results[0];
+      function tryRender() {
+        var main = document.querySelector('main.container');
+        var ls = main && main.querySelector('.live-status');
+        if (ls && !document.getElementById('ss-custom-timeline')) {
+          render(data);
+        } else if (!document.getElementById('ss-custom-timeline')) {
+          setTimeout(tryRender, 300);
         }
-        tryRender();
-      })
-      .catch(function (err) {
-        console.error('SmoothSend timeline: failed to load summary', err);
-      });
+      }
+      tryRender();
+    }).catch(function (err) {
+      console.error('SmoothSend timeline: failed to load data', err);
+    });
   }
 
   if (document.readyState === 'loading') {
