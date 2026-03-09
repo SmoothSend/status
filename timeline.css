@@ -134,6 +134,49 @@
   font-variant-numeric: tabular-nums;
 }
 
+.ss-tooltip-issues {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a2a;
+}
+
+.ss-tooltip-issues-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.ss-tooltip-issue {
+  font-size: 12px;
+  color: #ccc;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.ss-issue-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.ss-issue-tag-maint {
+  background: rgba(0, 102, 255, 0.15);
+  color: #0066FF;
+  border: 1px solid rgba(0, 102, 255, 0.3);
+}
+
+.ss-issue-tag-incident {
+  background: rgba(208, 2, 27, 0.15);
+  color: #D0021B;
+  border: 1px solid rgba(208, 2, 27, 0.3);
+}
+
 .ss-tooltip-svc {
   font-size: 11px;
   color: #666;
