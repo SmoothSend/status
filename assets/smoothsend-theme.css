@@ -1,69 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 :root {
-  --body-background-color: #0B0C15;
-  --body-text-color: #E2E8F0;
-  --card-background-color: #13141F;
-  --nav-background-color: #0B0C15;
-  --nav-border-bottom-color: #2D3142;
-  --link-color: #7595FF;
-  --link-hover-color: #94ABFF;
-  --success-color: #10B981;
-  --warning-color: #F59E0B;
-  --danger-color: #EF4444;
-  --tag-background-color: #1E2030;
-  --tag-text-color: #E2E8F0;
-  --tag-border-color: #2D3142;
-  --hr-color: #2D3142;
-  --table-border-color: #2D3142;
-  --table-odd-row-background-color: #13141F;
-  --table-even-row-background-color: #0B0C15;
-  --footer-text-color: #94A3B8;
-  --icon-filter: brightness(0) saturate(100%) invert(65%) sepia(30%) saturate(1000%) hue-rotate(195deg) brightness(100%) contrast(100%);
+  --body-background-color: #000000;
+  --body-text-color: #ffffff;
+  --card-background-color: #0A0A0A;
+  --nav-background-color: #000000;
+  --nav-border-bottom-color: #333333;
+  --link-color: #0066FF;
+  --link-hover-color: #3385FF;
+  --success-color: #0066FF;
+  --warning-color: #F5A623;
+  --danger-color: #D0021B;
+  --tag-background-color: rgba(0, 102, 255, 0.1);
+  --tag-text-color: #0066FF;
+  --tag-border-color: #333333;
+  --hr-color: #333333;
+  --table-border-color: #333333;
+  --table-odd-row-background-color: #0A0A0A;
+  --table-even-row-background-color: #000000;
+  --footer-text-color: #888888;
+  --icon-filter: none;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  background: #000000 !important;
+  color: #ffffff !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 nav {
-  border-bottom: 1px solid #2D3142 !important;
-  backdrop-filter: blur(12px);
+  background: #000000 !important;
+  border-bottom: 1px solid #333333 !important;
 }
 
-nav a {
-  color: #E2E8F0 !important;
-  transition: color 0.2s ease;
+nav a,
+nav .nav-item {
+  color: #ffffff !important;
+  font-weight: 500;
+  font-size: 14px;
+  transition: color 0.15s ease;
 }
 
 nav a:hover {
-  color: #7595FF !important;
+  color: #0066FF !important;
 }
 
-.status-up {
-  color: #10B981 !important;
+.logo img {
+  height: 28px !important;
+  width: auto !important;
 }
 
-.status-down {
-  color: #EF4444 !important;
+.all-ok {
+  background: rgba(0, 102, 255, 0.1) !important;
+  border: 1px solid rgba(0, 102, 255, 0.3) !important;
+  color: #0066FF !important;
 }
 
-.status-degraded {
-  color: #F59E0B !important;
+.card,
+.site-card,
+article {
+  background: #0A0A0A !important;
+  border: 1px solid #333333 !important;
+  border-radius: 0 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff !important;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 a {
-  color: #7595FF;
-  transition: color 0.2s ease;
+  color: #0066FF !important;
+  text-decoration: none;
+  transition: color 0.15s ease;
 }
 
 a:hover {
-  color: #94ABFF;
+  color: #3385FF !important;
+}
+
+.up,
+.status-up,
+.tag.is-success {
+  color: #0066FF !important;
+  background: rgba(0, 102, 255, 0.1) !important;
+}
+
+.down,
+.status-down,
+.tag.is-danger {
+  color: #D0021B !important;
+  background: rgba(208, 2, 27, 0.1) !important;
+}
+
+.degraded,
+.status-degraded,
+.tag.is-warning {
+  color: #F5A623 !important;
+  background: rgba(245, 166, 35, 0.1) !important;
 }
 
 footer {
-  color: #94A3B8 !important;
-  border-top: 1px solid #2D3142;
+  background: #000000 !important;
+  border-top: 1px solid #333333 !important;
+  color: #888888 !important;
 }
 
 footer a {
-  color: #7595FF !important;
+  color: #888888 !important;
+}
+
+footer a:hover {
+  color: #0066FF !important;
+}
+
+.intro-title {
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.intro-message {
+  color: #A1A1AA !important;
+  font-size: 14px !important;
+}
+
+p {
+  color: #A1A1AA;
+}
+
+hr {
+  border-color: #333333 !important;
+}
+
+table {
+  border-color: #333333 !important;
+}
+
+td, th {
+  border-color: #333333 !important;
+}
+
+.response-time {
+  color: #A1A1AA !important;
+}
+
+.uptime {
+  color: #0066FF !important;
+  font-weight: 600;
 }
