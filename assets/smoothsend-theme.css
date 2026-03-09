@@ -1,0 +1,69 @@
+:root {
+  --body-background-color: #0B0C15;
+  --body-text-color: #E2E8F0;
+  --card-background-color: #13141F;
+  --nav-background-color: #0B0C15;
+  --nav-border-bottom-color: #2D3142;
+  --link-color: #7595FF;
+  --link-hover-color: #94ABFF;
+  --success-color: #10B981;
+  --warning-color: #F59E0B;
+  --danger-color: #EF4444;
+  --tag-background-color: #1E2030;
+  --tag-text-color: #E2E8F0;
+  --tag-border-color: #2D3142;
+  --hr-color: #2D3142;
+  --table-border-color: #2D3142;
+  --table-odd-row-background-color: #13141F;
+  --table-even-row-background-color: #0B0C15;
+  --footer-text-color: #94A3B8;
+  --icon-filter: brightness(0) saturate(100%) invert(65%) sepia(30%) saturate(1000%) hue-rotate(195deg) brightness(100%) contrast(100%);
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+nav {
+  border-bottom: 1px solid #2D3142 !important;
+  backdrop-filter: blur(12px);
+}
+
+nav a {
+  color: #E2E8F0 !important;
+  transition: color 0.2s ease;
+}
+
+nav a:hover {
+  color: #7595FF !important;
+}
+
+.status-up {
+  color: #10B981 !important;
+}
+
+.status-down {
+  color: #EF4444 !important;
+}
+
+.status-degraded {
+  color: #F59E0B !important;
+}
+
+a {
+  color: #7595FF;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #94ABFF;
+}
+
+footer {
+  color: #94A3B8 !important;
+  border-top: 1px solid #2D3142;
+}
+
+footer a {
+  color: #7595FF !important;
+}

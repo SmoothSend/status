@@ -14,14 +14,21 @@ sites:
 status-website:
   cname: status.smoothsend.xyz
   name: SmoothSend Status
-  theme: dark
+  themeUrl: https://status.smoothsend.xyz/smoothsend-theme.css
   logoUrl: https://smoothsend.xyz/logo.png
   favicon: https://smoothsend.xyz/favicon.ico
+  introTitle: "**SmoothSend** — Gasless Transaction Infrastructure"
+  introMessage: "Real-time service status for SmoothSend's API Gateway, Relayers, and supporting infrastructure. Monitored every 5 minutes."
   navbar:
     - title: Status
       href: /
+    - title: Docs
+      href: https://docs.smoothsend.xyz
+    - title: Website
+      href: https://smoothsend.xyz
     - title: GitHub
       href: https://github.com/$OWNER/$REPO
+  css: "body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; } .logo img { height: 32px; }"
 
 notifications:
   - type: discord
