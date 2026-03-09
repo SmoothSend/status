@@ -28,6 +28,10 @@ status-website:
       href: https://smoothsend.xyz
     - title: GitHub
       href: https://github.com/$OWNER/$REPO
+  customHeadHtml: >
+    <script>
+    (function(){var o=window.fetch;window.fetch=function(u,opts){if(typeof u==='string'&&u.indexOf('api.github.com')!==-1){return Promise.resolve(new Response('[]',{status:200,headers:{'Content-Type':'application/json'}}));}return o.apply(this,arguments);};})();
+    </script>
   links:
     - rel: stylesheet
       href: https://status.smoothsend.xyz/timeline.css

@@ -217,14 +217,15 @@
   white-space: nowrap;
 }
 
-/* Hide the default Upptime time period selector and live status cards */
+/* Hide default Upptime UI: time selector, live status cards, rate limit prompt */
 .f.changed,
-div.svelte-fqsq6s.f {
-  display: none !important;
-}
-
+div.svelte-fqsq6s.f,
 .live-status,
-.live-status ~ section:not(.svelte-8lnl4f) {
+section.svelte-fqsq6s,
+.live-status ~ section,
+.svelte-8lnl4f:has(.loading),
+form[action*="token"],
+div:has(> input[placeholder*="token"]) {
   display: none !important;
 }
 
