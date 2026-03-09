@@ -1,0 +1,28 @@
+owner: SmoothSend
+repo: status
+
+sites:
+  - name: API Gateway
+    url: https://proxy.smoothsend.xyz/health
+  - name: Aptos Relayer (Mainnet)
+    url: http://api.smoothsend.xyz:3000/ping
+  - name: EVM Relayer (Testnet)
+    url: https://smoothsendrelayerevm.onrender.com/api/v1/relayer/health
+  - name: Stellar Relayer (Testnet)
+    url: https://stellar-relayer.onrender.com/health
+
+status-website:
+  cname: status.smoothsend.xyz
+  name: SmoothSend Status
+  theme: dark
+  logoUrl: https://smoothsend.xyz/logo.png
+  favicon: https://smoothsend.xyz/favicon.ico
+  navbar:
+    - title: Status
+      href: /
+    - title: GitHub
+      href: https://github.com/$OWNER/$REPO
+
+user-agent: SmoothSend-StatusBot
+assignees:
+  - vedmohan
