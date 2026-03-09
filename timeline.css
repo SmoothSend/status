@@ -54,7 +54,7 @@
   gap: 2px;
   align-items: stretch;
   border-radius: 3px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .ss-bar {
@@ -71,33 +71,6 @@
   transform: scaleY(1.15);
 }
 
-.ss-bar::after {
-  content: attr(data-date) '\A' attr(data-status);
-  white-space: pre;
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: #111;
-  border: 1px solid #333;
-  color: #fff;
-  font-size: 11px;
-  line-height: 1.4;
-  padding: 4px 8px;
-  border-radius: 4px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s;
-  z-index: 100;
-  font-family: 'Inter', -apple-system, sans-serif;
-  text-align: center;
-  min-width: 70px;
-}
-
-.ss-bar:hover::after {
-  opacity: 1;
-}
-
 .ss-bar-operational {
   background-color: #0066FF;
 }
@@ -108,6 +81,65 @@
 
 .ss-bar-outage {
   background-color: #D0021B;
+}
+
+/* Rich tooltip card */
+.ss-tooltip {
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  background: #111111;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 12px 16px;
+  min-width: 200px;
+  max-width: 280px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  font-family: 'Inter', -apple-system, sans-serif;
+  pointer-events: none;
+}
+
+.ss-tooltip-date {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.ss-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ss-tooltip-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ss-tooltip-label {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ss-tooltip-detail {
+  font-size: 12px;
+  color: #888;
+  margin-left: auto;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ss-tooltip-svc {
+  font-size: 11px;
+  color: #666;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid #2a2a2a;
 }
 
 .ss-timeline-legend {
@@ -152,8 +184,8 @@
     font-size: 14px;
   }
 
-  .ss-bar::after {
-    display: none;
+  .ss-tooltip {
+    display: none !important;
   }
 
   .ss-timeline-center {
