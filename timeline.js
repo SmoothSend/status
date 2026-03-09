@@ -89,22 +89,27 @@
     return days;
   }
 
-  function fetchIssues(serviceNames) {
-    var url = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/issues?state=all&per_page=100&labels=maintenance,incident';
+  var TRUSTED_AUTHORS = ['ivedmohan', 'upptime-bot', 'github-actions[bot]'];
+
+  function fetchIssuesForLabel(label, serviceNames) {
+    var url = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/issues?state=all&per_page=100&labels=' + label;
     return fetch(url)
       .then(function (r) { return r.json(); })
       .then(function (issues) {
         if (!Array.isArray(issues)) return;
         issues.forEach(function (issue) {
           if (issue.pull_request) return;
-          var labels = (issue.labels || []).map(function (l) { return l.name; });
-          var isMaintenance = labels.indexOf('maintenance') !== -1;
-          var isIncident = labels.indexOf('incident') !== -1;
-          if (!isMaintenance && !isIncident) return;
+
+          var author = (issue.user && issue.user.login) || '';
+          var authorAssoc = issue.author_association || '';
+          var trusted = TRUSTED_AUTHORS.indexOf(author) !== -1
+            || authorAssoc === 'OWNER'
+            || authorAssoc === 'MEMBER'
+            || authorAssoc === 'COLLABORATOR';
+          if (!trusted) return;
 
           var matched = matchServiceToIssue(issue.title, serviceNames);
           var issueDays = getDaysForIssue(issue);
-
           if (matched.length === 0) matched = serviceNames;
 
           matched.forEach(function (svcName) {
@@ -113,7 +118,7 @@
               if (!issuesByServiceDay[key]) issuesByServiceDay[key] = [];
               issuesByServiceDay[key].push({
                 title: issue.title,
-                type: isMaintenance ? 'maintenance' : 'incident',
+                type: label,
                 url: issue.html_url,
                 number: issue.number
               });
@@ -122,6 +127,13 @@
         });
       })
       .catch(function () {});
+  }
+
+  function fetchIssues(serviceNames) {
+    return Promise.all([
+      fetchIssuesForLabel('maintenance', serviceNames),
+      fetchIssuesForLabel('incident', serviceNames)
+    ]);
   }
 
   var tooltip = null;
