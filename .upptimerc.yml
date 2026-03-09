@@ -23,6 +23,10 @@ status-website:
     - title: GitHub
       href: https://github.com/$OWNER/$REPO
 
+notifications:
+  - type: discord
+    url: $DISCORD_WEBHOOK
+
 user-agent: SmoothSend-StatusBot
 assignees:
   - vedmohan
