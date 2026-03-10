@@ -22,19 +22,19 @@
     "url": "http://api.smoothsend.xyz:3000/ping",
     "icon": "https://icons.duckduckgo.com/ip3/api.smoothsend.xyz.ico",
     "slug": "aptos-relayer-mainnet",
-    "status": "down",
-    "uptime": "99.99%",
-    "uptimeDay": "99.99%",
-    "uptimeWeek": "99.99%",
-    "uptimeMonth": "99.99%",
-    "uptimeYear": "99.99%",
-    "time": 75,
-    "timeDay": 75,
-    "timeWeek": 75,
-    "timeMonth": 75,
-    "timeYear": 75,
+    "status": "up",
+    "uptime": "96.48%",
+    "uptimeDay": "96.48%",
+    "uptimeWeek": "96.48%",
+    "uptimeMonth": "96.48%",
+    "uptimeYear": "96.48%",
+    "time": 71,
+    "timeDay": 71,
+    "timeWeek": 71,
+    "timeMonth": 71,
+    "timeYear": 71,
     "dailyMinutesDown": {
-      "2026-03-10": 0
+      "2026-03-10": 29
     }
   },
   {
@@ -42,19 +42,19 @@
     "url": "https://smoothsendrelayerevm.onrender.com/api/v1/relayer/health",
     "icon": "https://icons.duckduckgo.com/ip3/smoothsendrelayerevm.onrender.com.ico",
     "slug": "evm-relayer-testnet",
-    "status": "down",
-    "uptime": "99.99%",
-    "uptimeDay": "99.99%",
-    "uptimeWeek": "99.99%",
-    "uptimeMonth": "99.99%",
-    "uptimeYear": "99.99%",
-    "time": 288,
-    "timeDay": 288,
-    "timeWeek": 288,
-    "timeMonth": 288,
-    "timeYear": 288,
+    "status": "up",
+    "uptime": "96.48%",
+    "uptimeDay": "96.48%",
+    "uptimeWeek": "96.48%",
+    "uptimeMonth": "96.48%",
+    "uptimeYear": "96.48%",
+    "time": 334,
+    "timeDay": 334,
+    "timeWeek": 334,
+    "timeMonth": 334,
+    "timeYear": 334,
     "dailyMinutesDown": {
-      "2026-03-10": 0
+      "2026-03-10": 29
     }
   },
   {
