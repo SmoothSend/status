@@ -360,7 +360,67 @@
     return hdr;
   }
 
-  function render(data) {
+  function getPastIncidents(issues) {
+    if (!Array.isArray(issues)) return [];
+    var allServices = [];
+    groups.forEach(function (g) { allServices = allServices.concat(g.services); });
+
+    return issues.filter(function (issue) {
+      if (issue.pull_request) return false;
+      var labels = (issue.labels || []).map(function (l) { return l.name; });
+      if (labels.indexOf('maintenance') === -1 && labels.indexOf('incident') === -1) return false;
+      var author = (issue.user && issue.user.login) || '';
+      var authorAssoc = issue.author_association || '';
+      var trusted = TRUSTED_AUTHORS.indexOf(author) !== -1
+        || authorAssoc === 'OWNER' || authorAssoc === 'MEMBER' || authorAssoc === 'COLLABORATOR';
+      return trusted && issue.state === 'closed';
+    }).sort(function (a, b) {
+      var da = (a.closed_at || a.updated_at || a.created_at) || '';
+      var db = (b.closed_at || b.updated_at || b.created_at) || '';
+      return db.localeCompare(da);
+    });
+  }
+
+  function createPastIncidentsSection(issues) {
+    var past = getPastIncidents(issues);
+    var section = document.createElement('div');
+    section.className = 'ss-past-incidents';
+
+    var h2 = document.createElement('h2');
+    h2.className = 'ss-past-incidents-title';
+    h2.textContent = 'Past Incidents';
+    section.appendChild(h2);
+
+    if (past.length === 0) {
+      var empty = document.createElement('div');
+      empty.className = 'ss-past-incidents-empty';
+      empty.textContent = 'No incidents reported in the last 90 days. All systems operational.';
+      section.appendChild(empty);
+      return section;
+    }
+
+    past.forEach(function (issue) {
+      var labels = (issue.labels || []).map(function (l) { return l.name; });
+      var isMaintenance = labels.indexOf('maintenance') !== -1;
+      var date = issue.closed_at || issue.updated_at || issue.created_at;
+      var dateStr = formatDateLong(getDayKey(new Date(date)));
+      var typeTag = isMaintenance ? 'Maintenance' : 'Incident';
+
+      var card = document.createElement('div');
+      card.className = 'ss-past-incident-card';
+      card.innerHTML =
+        '<div class="ss-past-incident-date">' + dateStr + '</div>' +
+        '<div class="ss-past-incident-row">' +
+        '<span class="ss-past-incident-tag ss-past-incident-tag-' + (isMaintenance ? 'maint' : 'incident') + '">' + typeTag + '</span>' +
+        '<a href="' + (issue.html_url || '#') + '" target="_blank" rel="noopener" class="ss-past-incident-link">' + (issue.title || 'Issue #' + issue.number) + ' →</a>' +
+        '</div>';
+      section.appendChild(card);
+    });
+
+    return section;
+  }
+
+  function render(data, rawIssues) {
     var days = getLast90Days();
     var main = document.querySelector('main.container');
     if (!main) return;
@@ -379,6 +439,8 @@
       });
     });
 
+    wrapper.appendChild(createPastIncidentsSection(rawIssues || []));
+
     var existingSections = main.querySelectorAll('.live-status, .live-status ~ section');
     existingSections.forEach(function (el) { el.style.display = 'none'; });
     var h2parent = main.querySelector('.f.changed');
@@ -391,16 +453,25 @@
     var allServices = [];
     groups.forEach(function (g) { allServices = allServices.concat(g.services); });
 
+    var rawUrl = 'https://raw.githubusercontent.com/' + OWNER + '/' + REPO + '/master/history/issues.json';
+
     Promise.all([
       fetch('https://raw.githubusercontent.com/' + OWNER + '/' + REPO + '/master/history/summary.json').then(function (r) { return r.json(); }),
-      fetchIssues(allServices)
+      getCachedIssues() || fetch(rawUrl).then(function (r) {
+        return r.ok ? r.json() : Promise.resolve([]);
+      }).then(function (issues) {
+        if (Array.isArray(issues)) setCachedIssues(issues);
+        return Array.isArray(issues) ? issues : [];
+      }).catch(function () { return []; })
     ]).then(function (results) {
       var data = results[0];
+      var rawIssues = Array.isArray(results[1]) ? results[1] : [];
+      processIssues(rawIssues, allServices);
       function tryRender() {
         var main = document.querySelector('main.container');
         var ls = main && main.querySelector('.live-status');
         if (ls && !document.getElementById('ss-custom-timeline')) {
-          render(data);
+          render(data, rawIssues);
         } else if (!document.getElementById('ss-custom-timeline')) {
           setTimeout(tryRender, 300);
         }
