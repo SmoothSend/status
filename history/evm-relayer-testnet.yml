@@ -1,7 +1,7 @@
 url: https://smoothsendrelayerevm.onrender.com/api/v1/relayer/health
-status: down
-code: 429
-responseTime: 118
-lastUpdated: 2026-03-10T11:25:10.270Z
+status: up
+code: 200
+responseTime: 471
+lastUpdated: 2026-03-10T11:53:55.349Z
 startTime: 2026-03-09T22:17:41.489Z
 generator: Upptime <https://github.com/upptime/upptime>
