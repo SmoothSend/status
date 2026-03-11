@@ -21,7 +21,7 @@ jobs:
           gh api "repos/${{ github.repository }}/issues?state=all&per_page=100" --paginate --jq '[.[] | select(.pull_request == null)]' > history/issues.json
       - name: Commit if changed
         run: |
-          git config user.name "Upptime Bot"
-          git config user.email "73812536+upptime-bot@users.noreply.github.com"
+          git config user.name "smoothsendlabs"
+          git config user.email "smoothsendlabs@users.noreply.github.com"
           git add history/issues.json
-          git diff --staged --quiet || (git commit -m "Update issues cache [skip ci]" && git push)
+          git diff --staged --quiet || (git pull --rebase origin main && git commit -m "Update issues cache [skip ci]" && git push)
