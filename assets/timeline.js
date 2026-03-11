@@ -89,7 +89,7 @@
     return days;
   }
 
-  var TRUSTED_AUTHORS = ['ivedmohan', 'upptime-bot', 'github-actions[bot]'];
+  var TRUSTED_AUTHORS = ['ivedmohan', 'upptime-bot', 'github-actions[bot]', 'smoothsendlabs', 'ImTani'];
 
   var CACHE_KEY = 'ss_issues_cache';
   var CACHE_TTL = 5 * 60 * 1000; // 5 minutes
