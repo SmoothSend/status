@@ -14,6 +14,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_PAT || github.token }}
+      - name: Update branch
+        run: |
+          git config user.name "smoothsendlabs"
+          git config user.email "smoothsendlabs@users.noreply.github.com"
+          git pull --rebase origin main
       - name: Fetch and save issues
         env:
           GH_TOKEN: ${{ secrets.GH_PAT || github.token }}
@@ -21,7 +26,5 @@ jobs:
           gh api "repos/${{ github.repository }}/issues?state=all&per_page=100" --paginate --jq '[.[] | select(.pull_request == null)]' > history/issues.json
       - name: Commit if changed
         run: |
-          git config user.name "smoothsendlabs"
-          git config user.email "smoothsendlabs@users.noreply.github.com"
           git add history/issues.json
-          git diff --staged --quiet || (git pull --rebase origin main && git commit -m "Update issues cache [skip ci]" && git push)
+          git diff --staged --quiet || (git commit -m "Update issues cache [skip ci]" && git push)
