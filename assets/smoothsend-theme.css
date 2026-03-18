@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --body-background-color: #0B0C15;
+  --body-background-color: #0E0E11;
   --body-text-color: #E2E8F0;
   --card-background-color: #13141F;
-  --nav-background-color: #0B0C15;
+  --nav-background-color: #0E0E11;
   --nav-border-bottom-color: #2D3142;
   --link-color: #7595FF;
   --link-hover-color: #94ABFF;
@@ -34,14 +34,14 @@
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  background: #0B0C15 !important;
+  background: #0E0E11 !important;
   color: #E2E8F0 !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 nav {
-  background: #0B0C15 !important;
+  background: #0E0E11 !important;
   border-bottom: 1px solid #2D3142 !important;
 }
 
@@ -66,6 +66,18 @@ nav a:hover {
   background: rgba(117, 149, 255, 0.1) !important;
   border: 1px solid rgba(117, 149, 255, 0.3) !important;
   color: #7595FF !important;
+}
+
+/* Hide the ✅ emoji Upptime injects before the "All systems operational" text */
+.all-ok p::before,
+.all-ok span::before {
+  content: none !important;
+}
+.all-ok {
+  font-size: inherit;
+}
+.all-ok * {
+  font-size: inherit;
 }
 
 .card,
@@ -124,7 +136,7 @@ a:hover {
 }
 
 footer {
-  background: #0B0C15 !important;
+  background: #0E0E11 !important;
   border-top: 1px solid #2D3142 !important;
   color: #888888 !important;
 }
