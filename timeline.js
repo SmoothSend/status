@@ -35,10 +35,16 @@
     return 'outage';
   }
 
+  // Pull status colors from CSS custom properties — single source of truth
+  var _root = document.documentElement;
+  var C = {
+    operational: getComputedStyle(_root).getPropertyValue('--ss-color-operational').trim() || '#7595FF',
+    degraded:    getComputedStyle(_root).getPropertyValue('--ss-color-degraded').trim()    || '#F5A623',
+    outage:      getComputedStyle(_root).getPropertyValue('--ss-color-outage').trim()      || '#FF5C5C'
+  };
+
   function getBarColor(status) {
-    if (status === 'operational') return '#0066FF';
-    if (status === 'degraded') return '#F5A623';
-    return '#D0021B';
+    return C[status] || C.outage;
   }
 
   function getStatusLabel(svc) {
@@ -48,9 +54,9 @@
   }
 
   function getStatusColor(svc) {
-    if (svc.status === 'up') return '#0066FF';
-    if (svc.status === 'degraded') return '#F5A623';
-    return '#D0021B';
+    if (svc.status === 'up') return C.operational;
+    if (svc.status === 'degraded') return C.degraded;
+    return C.outage;
   }
 
   function formatDateLong(dateStr) {
@@ -198,31 +204,31 @@
     var statusIcon, statusLabel, statusColor, detail;
 
     if (status === 'operational' && issues.length === 0) {
-      statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>';
+      statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="' + C.operational + '" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>';
       statusLabel = 'No downtime recorded';
-      statusColor = '#0066FF';
+      statusColor = C.operational;
       detail = '';
     } else if (status === 'operational' && issues.length > 0) {
       var t = issues[0].type;
       if (t === 'maintenance') {
-        statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>';
+        statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="' + C.operational + '" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>';
         statusLabel = 'Scheduled maintenance';
-        statusColor = '#0066FF';
+        statusColor = C.operational;
       } else {
-        statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01"/></svg>';
+        statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="' + C.degraded + '" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01"/></svg>';
         statusLabel = 'Incident reported';
-        statusColor = '#F5A623';
+        statusColor = C.degraded;
       }
       detail = '';
     } else if (status === 'degraded') {
-      statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01"/></svg>';
+      statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="' + C.degraded + '" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01"/></svg>';
       statusLabel = 'Partial outage';
-      statusColor = '#F5A623';
+      statusColor = C.degraded;
       detail = formatDuration(mins);
     } else {
-      statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D0021B" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
+      statusIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="' + C.outage + '" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
       statusLabel = 'Major outage';
-      statusColor = '#D0021B';
+      statusColor = C.outage;
       detail = formatDuration(mins);
     }
 
@@ -306,10 +312,10 @@
       if (hasIssue && barStatus === 'operational') {
         var issueType = issuesByServiceDay[issueKey][0].type;
         if (issueType === 'maintenance') {
-          bar.style.backgroundColor = '#0066FF';
+          bar.style.backgroundColor = C.operational;
           bar.style.backgroundImage = 'repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(255,255,255,0.15) 2px,rgba(255,255,255,0.15) 4px)';
         } else {
-          bar.style.backgroundColor = '#F5A623';
+          bar.style.backgroundColor = C.degraded;
         }
       } else {
         bar.style.backgroundColor = getBarColor(barStatus);
