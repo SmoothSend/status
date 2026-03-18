@@ -1,23 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --body-background-color: #0d0f14;
+  --body-background-color: #0B0C15;
   --body-text-color: #ffffff;
-  --card-background-color: #12141c;
-  --nav-background-color: #0d0f14;
-  --nav-border-bottom-color: #2a2d3a;
+  --card-background-color: #13141F;
+  --nav-background-color: #0B0C15;
+  --nav-border-bottom-color: #2D3142;
   --link-color: #7595FF;
-  --link-hover-color: #94AAFF;
-  --success-color: #7595FF;
+  --link-hover-color: #94ABFF;
+  --success-color: #10B981;
   --warning-color: #F5A623;
   --danger-color: #D0021B;
   --tag-background-color: rgba(117, 149, 255, 0.1);
   --tag-text-color: #7595FF;
-  --tag-border-color: #2a2d3a;
-  --hr-color: #2a2d3a;
-  --table-border-color: #2a2d3a;
-  --table-odd-row-background-color: #12141c;
-  --table-even-row-background-color: #0d0f14;
+  --tag-border-color: #2D3142;
+  --hr-color: #2D3142;
+  --table-border-color: #2D3142;
+  --table-odd-row-background-color: #13141F;
+  --table-even-row-background-color: #0B0C15;
   --footer-text-color: #888888;
   --icon-filter: none;
 }
@@ -28,15 +28,15 @@
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  background: #0d0f14 !important;
+  background: #0B0C15 !important;
   color: #ffffff !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 nav {
-  background: #0d0f14 !important;
-  border-bottom: 1px solid #2a2d3a !important;
+  background: #0B0C15 !important;
+  border-bottom: 1px solid #2D3142 !important;
 }
 
 nav a,
@@ -57,17 +57,26 @@ nav a:hover {
 }
 
 .all-ok {
-  background: rgba(117, 149, 255, 0.1) !important;
-  border: 1px solid rgba(117, 149, 255, 0.3) !important;
-  color: #7595FF !important;
+  background: rgba(16, 185, 129, 0.1) !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+  color: #10B981 !important;
 }
 
 .card,
 .site-card,
 article {
-  background: #12141c !important;
-  border: 1px solid #2a2d3a !important;
-  border-radius: 0 !important;
+  background: #13141F !important;
+  border: 1px solid #2D3142 !important;
+  border-radius: 8px !important;
+}
+
+.site-card {
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.site-card:hover {
+  transform: translateY(-2px);
+  border-color: #7595FF !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -89,8 +98,8 @@ a:hover {
 .up,
 .status-up,
 .tag.is-success {
-  color: #7595FF !important;
-  background: rgba(117, 149, 255, 0.1) !important;
+  color: #10B981 !important;
+  background: rgba(16, 185, 129, 0.1) !important;
 }
 
 .down,
@@ -108,8 +117,8 @@ a:hover {
 }
 
 footer {
-  background: #0d0f14 !important;
-  border-top: 1px solid #2a2d3a !important;
+  background: #0B0C15 !important;
+  border-top: 1px solid #2D3142 !important;
   color: #888888 !important;
 }
 
@@ -137,15 +146,15 @@ p {
 }
 
 hr {
-  border-color: #2a2d3a !important;
+  border-color: #2D3142 !important;
 }
 
 table {
-  border-color: #2a2d3a !important;
+  border-color: #2D3142 !important;
 }
 
 td, th {
-  border-color: #2a2d3a !important;
+  border-color: #2D3142 !important;
 }
 
 .response-time {
@@ -153,6 +162,6 @@ td, th {
 }
 
 .uptime {
-  color: #7595FF !important;
+  color: #10B981 !important;
   font-weight: 600;
 }
