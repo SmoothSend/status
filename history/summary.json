@@ -11,8 +11,8 @@
     "uptimeMonth": "100.00%",
     "uptimeYear": "100.00%",
     "time": 101,
-    "timeDay": 89,
-    "timeWeek": 102,
+    "timeDay": 90,
+    "timeWeek": 105,
     "timeMonth": 101,
     "timeYear": 101,
     "dailyMinutesDown": {}
@@ -28,11 +28,11 @@
     "uptimeWeek": "100.00%",
     "uptimeMonth": "99.88%",
     "uptimeYear": "99.88%",
-    "time": 123,
-    "timeDay": 62,
-    "timeWeek": 123,
-    "timeMonth": 123,
-    "timeYear": 123,
+    "time": 126,
+    "timeDay": 185,
+    "timeWeek": 125,
+    "timeMonth": 126,
+    "timeYear": 126,
     "dailyMinutesDown": {
       "2026-03-10": 29
     }
@@ -48,11 +48,11 @@
     "uptimeWeek": "100.00%",
     "uptimeMonth": "99.88%",
     "uptimeYear": "99.88%",
-    "time": 341,
-    "timeDay": 288,
-    "timeWeek": 338,
-    "timeMonth": 341,
-    "timeYear": 341,
+    "time": 336,
+    "timeDay": 240,
+    "timeWeek": 339,
+    "timeMonth": 336,
+    "timeYear": 336,
     "dailyMinutesDown": {
       "2026-03-10": 29
     }
@@ -63,16 +63,16 @@
     "icon": "https://icons.duckduckgo.com/ip3/stellar-relayer.onrender.com.ico",
     "slug": "stellar-relayer-testnet",
     "status": "up",
-    "uptime": "99.89%",
+    "uptime": "99.90%",
     "uptimeDay": "100.00%",
     "uptimeWeek": "100.00%",
-    "uptimeMonth": "99.89%",
-    "uptimeYear": "99.89%",
-    "time": 363,
-    "timeDay": 372,
-    "timeWeek": 281,
-    "timeMonth": 363,
-    "timeYear": 363,
+    "uptimeMonth": "99.90%",
+    "uptimeYear": "99.90%",
+    "time": 355,
+    "timeDay": 190,
+    "timeWeek": 278,
+    "timeMonth": 355,
+    "timeYear": 355,
     "dailyMinutesDown": {
       "2026-03-15": 25
     }
