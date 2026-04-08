@@ -1,7 +1,7 @@
 url: https://stellar-relayer.onrender.com/health
-status: down
-code: 521
-responseTime: 19557
-lastUpdated: 2026-04-08T17:50:43.605Z
+status: up
+code: 200
+responseTime: 267
+lastUpdated: 2026-04-08T19:58:13.299Z
 startTime: 2026-03-09T22:17:42.388Z
 generator: Upptime <https://github.com/upptime/upptime>
