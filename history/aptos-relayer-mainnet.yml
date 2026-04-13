@@ -1,7 +1,7 @@
 url: http://api.smoothsend.xyz:3000/ping
-status: down
-code: 0
-responseTime: 0
-lastUpdated: 2026-04-13T20:01:10.831Z
+status: up
+code: 200
+responseTime: 84
+lastUpdated: 2026-04-13T21:04:40.087Z
 startTime: 2026-03-09T22:17:41.127Z
 generator: Upptime <https://github.com/upptime/upptime>
