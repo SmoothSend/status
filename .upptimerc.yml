@@ -5,7 +5,7 @@ sites:
   - name: API Gateway
     url: https://proxy.smoothsend.xyz/health
   - name: Aptos Relayer (Mainnet)
-    url: http://api.smoothsend.xyz:3000/ping
+    url: http://api4.smoothsend.xyz/ping
   - name: EVM Relayer (Testnet)
     url: https://smoothsendrelayerevm.onrender.com/api/v1/relayer/health
   - name: Stellar Relayer (Testnet)
