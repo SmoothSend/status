@@ -23,11 +23,11 @@
     "icon": "https://icons.duckduckgo.com/ip3/api.smoothsend.xyz.ico",
     "slug": "aptos-relayer-mainnet",
     "status": "down",
-    "uptime": "99.92%",
-    "uptimeDay": "94.53%",
-    "uptimeWeek": "99.22%",
-    "uptimeMonth": "99.82%",
-    "uptimeYear": "99.92%",
+    "uptime": "99.82%",
+    "uptimeDay": "85.10%",
+    "uptimeWeek": "97.87%",
+    "uptimeMonth": "99.51%",
+    "uptimeYear": "99.82%",
     "time": 118,
     "timeDay": 0,
     "timeWeek": 84,
@@ -35,7 +35,7 @@
     "timeYear": 118,
     "dailyMinutesDown": {
       "2026-03-10": 29,
-      "2026-06-12": 79
+      "2026-06-12": 215
     }
   },
   {
@@ -44,11 +44,11 @@
     "icon": "https://icons.duckduckgo.com/ip3/smoothsendrelayerevm.onrender.com.ico",
     "slug": "evm-relayer-testnet",
     "status": "up",
-    "uptime": "84.80%",
+    "uptime": "84.82%",
     "uptimeDay": "100.00%",
     "uptimeWeek": "100.00%",
     "uptimeMonth": "78.16%",
-    "uptimeYear": "84.80%",
+    "uptimeYear": "84.82%",
     "time": 356,
     "timeDay": 0,
     "timeWeek": 354,
@@ -81,11 +81,11 @@
     "icon": "https://icons.duckduckgo.com/ip3/stellar-relayer.onrender.com.ico",
     "slug": "stellar-relayer-testnet",
     "status": "down",
-    "uptime": "74.85%",
-    "uptimeDay": "46.55%",
-    "uptimeWeek": "92.36%",
-    "uptimeMonth": "46.84%",
-    "uptimeYear": "74.85%",
+    "uptime": "74.77%",
+    "uptimeDay": "36.95%",
+    "uptimeWeek": "90.99%",
+    "uptimeMonth": "46.53%",
+    "uptimeYear": "74.77%",
     "time": 489,
     "timeDay": 61,
     "timeWeek": 366,
@@ -120,7 +120,7 @@
       "2026-05-18": 1440,
       "2026-05-17": 1440,
       "2026-05-16": 597,
-      "2026-06-12": 102,
+      "2026-06-12": 241,
       "2026-06-11": 667
     }
   }
