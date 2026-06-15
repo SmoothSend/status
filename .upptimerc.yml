@@ -10,6 +10,8 @@ sites:
     url: https://smoothsendrelayerevm.onrender.com/api/v1/relayer/health
   - name: Stellar Relayer (Testnet)
     url: https://stellar-relayer.onrender.com/health
+  - name: Avalanche Bundler (Mainnet)
+    url: https://avaxapi.smoothsend.xyz/ping
 
 status-website:
   cname: status.smoothsend.xyz
