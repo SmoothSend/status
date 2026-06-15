@@ -8,6 +8,7 @@
   var groups = [
     { label: 'Core Infrastructure', services: ['API Gateway'] },
     { label: 'Production Relayers', services: ['Aptos Relayer (Mainnet)'] },
+    { label: 'Production Bundlers', services: ['Avalanche Bundler (Mainnet)'] },
     { label: 'Experimental Relayers (Testnet)', services: ['EVM Relayer (Testnet)', 'Stellar Relayer (Testnet)'] }
   ];
 
