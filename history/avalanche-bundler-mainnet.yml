@@ -1,7 +1,7 @@
 url: https://avaxapi.smoothsend.xyz/ping
-status: down
-code: 522
-responseTime: 39165
-lastUpdated: 2026-08-17T14:43:45.113Z
+status: up
+code: 200
+responseTime: 815
+lastUpdated: 2026-08-17T14:58:45.695Z
 startTime: 2026-06-15T16:08:33.978Z
 generator: Upptime <https://github.com/upptime/upptime>
